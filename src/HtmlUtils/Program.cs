@@ -21,7 +21,13 @@ class Program
             description: "Replace by"
         );
 
+        var xpath = new Argument<string>(
+            name: "xpath",
+            description: "xpath"
+        );
+
         var replaceCommand = new Command("replace", "Replace text in html");
+        replaceCommand.AddArgument(xpath);
         replaceCommand.AddArgument(sourceText);
         replaceCommand.AddArgument(replaceByText);
 
@@ -30,10 +36,10 @@ class Program
         rootCommand.AddCommand(replaceCommand);
 
 
-        replaceCommand.SetHandler((file, source, replace) =>
+        replaceCommand.SetHandler((file, xpath, source, replace) =>
         {
-            Replace(file, source, replace);
-        }, fileOption, sourceText, replaceByText);
+            Replace(file, xpath, source, replace);
+        }, fileOption, xpath, sourceText, replaceByText);
 
 
         await rootCommand.InvokeAsync(args);
@@ -41,14 +47,16 @@ class Program
         return 0;
     }
 
-    static void Replace(FileInfo file, string source, string replace)
+    static void Replace(FileInfo file, string xpath, string source, string replace)
     {
         var htmlFile = file.FullName;
 
         var htmlDoc = new HtmlDocument();
         htmlDoc.Load(htmlFile);
 
-        var title = htmlDoc.DocumentNode.SelectSingleNode("//head/title");
+        // "//head/title"
+
+        var title = htmlDoc.DocumentNode.SelectSingleNode(xpath);
         if (title != null)
         {
             var innerText = title.InnerHtml.Replace(source, replace);
