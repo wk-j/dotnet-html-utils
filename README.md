@@ -10,7 +10,7 @@ dotnet tool install -g wk.HtmlUtils
 
 # Usage
 
-Find and replace `{version}` with `0.1.0` in  tag:`<title></title>` of `index.html`
+Find and replace word:`{version}` with word:`0.1.0` in  tag:`<title></title>` of file:`index.html`
 
 ```
 wk-html-utils replace "//head/title" "{version}" "0.1.0" --file resource/index.html
